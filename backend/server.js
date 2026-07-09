@@ -37,7 +37,12 @@ app.use(cors({
     "https://employee-management-system-umber-eight.vercel.app",
   ],
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
 }));
+
+// Preflight requests handle karo
+app.options("*", cors());
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
