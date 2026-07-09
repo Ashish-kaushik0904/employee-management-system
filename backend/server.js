@@ -34,7 +34,7 @@ app.use(cookieParser());
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://employee-ms-frontend.vercel.app", // baad mein actual URL se replace karenge
+    "https://employee-management-system-umber-eight.vercel.app",
   ],
   credentials: true,
 }));
