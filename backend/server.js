@@ -20,6 +20,7 @@ import leaveRoutes from "./routes/leaveRoutes.js";
 import salaryRoutes from "./routes/salaryRoutes.js";
 import settingRoutes from "./routes/settingRoutes.js";
 import attendanceRoutes from "./routes/attendanceRoutes.js";
+app.set("trust proxy", 1);
 
 dotenv.config();
 connectDB();
