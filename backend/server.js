@@ -1,10 +1,6 @@
 import dns from "dns";
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
-
-import { setDefaultResultOrder } from "dns";
-setDefaultResultOrder("ipv4first");
-
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -20,7 +16,6 @@ import leaveRoutes from "./routes/leaveRoutes.js";
 import salaryRoutes from "./routes/salaryRoutes.js";
 import settingRoutes from "./routes/settingRoutes.js";
 import attendanceRoutes from "./routes/attendanceRoutes.js";
-app.set("trust proxy", 1);
 
 dotenv.config();
 connectDB();
@@ -29,6 +24,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+app.set("trust proxy", 1); // ← यहाँ
 
 app.use(express.json());
 app.use(cookieParser());
