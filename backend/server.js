@@ -41,9 +41,6 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
 }));
 
-// Preflight requests handle karo
-app.options("*", cors());
-
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (req, res) => {
