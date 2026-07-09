@@ -2,16 +2,9 @@ import User from "../models/User.js";
 import Employee from "../models/Employee.js";
 import jwt from "jsonwebtoken";
 
-const generateToken = (res, userId) => {
-  const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+const generateToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
     expiresIn: "7d",
-  });
-
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 };
 
@@ -25,32 +18,29 @@ export const register = async (req, res) => {
     }
 
     const user = await User.create({ name, email, password, role });
-    generateToken(res, user._id);
+    const token = generateToken(user._id);
 
     res.status(201).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       role: user.role,
+      token,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// LOGIN — pehle User check karo, phir Employee
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Pehle Admin/User table mein dhundho
     let user = await User.findOne({ email });
     let userType = "user";
 
-    // Nahi mila toh Employee table mein dhundho
     if (!user) {
-      user = await Employee.findOne({ email })
-        .populate("department", "name");
+      user = await Employee.findOne({ email }).populate("department", "name");
       userType = "employee";
     }
 
@@ -58,30 +48,19 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Password match karo
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-   const generateToken = (res, userId) => {
-  const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
-
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
-};
+    const token = generateToken(user._id);
 
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
       role: user.role,
+      token,
       ...(userType === "employee" && {
         employeeId: user.employeeId,
         department: user.department,
@@ -94,7 +73,6 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.cookie("token", "", { maxAge: 0 });
   res.json({ message: "Logged out successfully" });
 };
 

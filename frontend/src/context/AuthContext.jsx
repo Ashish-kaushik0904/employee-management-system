@@ -7,13 +7,18 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // App start pe check karo — cookie se user fetch karo
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setLoading(false);
+          return;
+        }
         const { data } = await API.get("/auth/me");
         setUser(data);
       } catch (error) {
+        localStorage.removeItem("token");
         setUser(null);
       } finally {
         setLoading(false);
@@ -23,18 +28,22 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (userData) => {
+    // Token localStorage mein save karo
+    if (userData.token) {
+      localStorage.setItem("token", userData.token);
+    }
     setUser(userData);
   };
 
   const logout = () => {
+    localStorage.removeItem("token");
     setUser(null);
   };
 
-  // Loading hote waqt blank screen — routes ke pehle
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-teal-600 text-xl font-semibold">Loading...</div>
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <p style={{ color: "#2563eb", fontSize: "16px", fontWeight: 600 }}>Loading...</p>
       </div>
     );
   }
