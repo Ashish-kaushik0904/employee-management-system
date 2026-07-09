@@ -32,7 +32,10 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: [
+    "http://localhost:5173",
+    "https://employee-ms-frontend.vercel.app", // baad mein actual URL se replace karenge
+  ],
   credentials: true,
 }));
 

@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
-  withCredentials: true, // cookies automatically send hongi har request ke saath
+  baseURL: "https://employee-ms-backend-3dyy.onrender.com/api",
+  withCredentials: true,
 });
 
 export default API;
