@@ -62,7 +62,7 @@ export const createEmployee = async (req, res) => {
     }
 
     // Image path — agar upload hua toh
-    const image = req.file ? `/uploads/${req.file.filename}` : "";
+    const image = req.file ? req.file.path : "";
 
     const employee = await Employee.create({
       employeeId,
@@ -109,8 +109,8 @@ export const updateEmployee = async (req, res) => {
 
     // Agar naya image upload hua toh update karo
     if (req.file) {
-      req.body.image = `/uploads/${req.file.filename}`;
-    }
+  req.body.image = req.file.path;
+}
 
     // Password change ho raha hai toh hash karo
     if (req.body.password) {

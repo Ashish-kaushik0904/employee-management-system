@@ -3,9 +3,7 @@ import API from "../../api/axios";
 
 const AdminAttendance = () => {
   const [attendance, setAttendance] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -37,7 +35,6 @@ const AdminAttendance = () => {
     absent: { bg: "#fce4ec", color: "#dc2626" },
   };
 
-  // Summary counts
   const presentCount = attendance.filter((a) => a.status === "present").length;
   const lateCount = attendance.filter((a) => a.status === "late").length;
 
@@ -64,27 +61,19 @@ const AdminAttendance = () => {
       </div>
 
       {/* Filters */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", gap: "12px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
         <input
           type="text"
           placeholder="Search By Employee ID or Name"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{
-            border: "1.5px solid #e2e8f0", borderRadius: "8px",
-            padding: "9px 14px", fontSize: "13px", width: "280px",
-            outline: "none", color: "#374151",
-          }}
+          style={{ border: "1.5px solid #e2e8f0", borderRadius: "8px", padding: "9px 14px", fontSize: "13px", width: "280px", outline: "none" }}
         />
         <input
           type="date"
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
-          style={{
-            border: "1.5px solid #e2e8f0", borderRadius: "8px",
-            padding: "9px 14px", fontSize: "13px",
-            outline: "none", color: "#374151",
-          }}
+          style={{ border: "1.5px solid #e2e8f0", borderRadius: "8px", padding: "9px 14px", fontSize: "13px", outline: "none" }}
         />
       </div>
 
@@ -124,7 +113,11 @@ const AdminAttendance = () => {
                     <td style={{ padding: "14px 16px" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                         {rec.employeeId?.image ? (
-                          <img src={`http://localhost:5000${rec.employeeId.image}`} style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover" }} />
+                          <img
+                            src={rec.employeeId.image}
+                            alt={rec.employeeId?.name}
+                            style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover" }}
+                          />
                         ) : (
                           <div style={{ width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "#2563eb", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 700 }}>
                             {rec.employeeId?.name?.charAt(0).toUpperCase() || "?"}
@@ -146,8 +139,7 @@ const AdminAttendance = () => {
                         backgroundColor: statusStyle[rec.status]?.bg,
                         color: statusStyle[rec.status]?.color,
                         padding: "4px 12px", borderRadius: "20px",
-                        fontSize: "12px", fontWeight: 700,
-                        textTransform: "capitalize",
+                        fontSize: "12px", fontWeight: 700, textTransform: "capitalize",
                       }}>
                         {rec.status}
                       </span>

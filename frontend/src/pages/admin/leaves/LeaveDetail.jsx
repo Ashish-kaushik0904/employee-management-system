@@ -30,87 +30,80 @@ const LeaveDetail = () => {
   const emp = leave.employeeId;
 
   return (
-    <div style={{ maxWidth: "700px", backgroundColor: "white", borderRadius: "10px", padding: "32px", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>
-      <h2 style={{ fontSize: "20px", fontWeight: "bold", textAlign: "center", marginBottom: "24px", color: "#1f2937" }}>
-        Leave Details
-      </h2>
-
-      <div style={{ display: "flex", gap: "32px", alignItems: "flex-start" }}>
-        {/* Image */}
-        <div style={{ flexShrink: 0 }}>
-          {emp?.image ? (
-            <img
-              src={`http://localhost:5000${emp.image}`}
-              alt={emp?.name}
-              style={{ width: "130px", height: "150px", objectFit: "cover", borderRadius: "8px" }}
-            />
-          ) : (
-            <div style={{ width: "130px", height: "150px", backgroundColor: "#008080", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: "48px", fontWeight: "bold" }}>
-              {emp?.name?.charAt(0).toUpperCase()}
-            </div>
-          )}
-        </div>
-
-        {/* Details */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "12px", fontSize: "14px" }}>
-          {[
-            { label: "Name:", value: emp?.name },
-            { label: "Employee ID:", value: emp?.employeeId },
-            { label: "Leave Type:", value: leave.leaveType },
-            { label: "Reason:", value: leave.description },
-            { label: "Department:", value: emp?.department?.name },
-            { label: "Start Date:", value: new Date(leave.fromDate).toLocaleDateString() },
-            { label: "End Date:", value: new Date(leave.toDate).toLocaleDateString() },
-          ].map(({ label, value }) => (
-            <div key={label} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span style={{ fontWeight: 700, color: "#1f2937", minWidth: "120px" }}>{label}</span>
-              <span style={{ color: "#4b5563" }}>{value || "-"}</span>
-            </div>
-          ))}
-
-          {/* Action Buttons */}
-          <div style={{ display: "flex", gap: "10px", marginTop: "8px" }}>
-            {leave.status === "pending" ? (
-              <>
-                <button
-                  onClick={() => handleStatus("approved")}
-                  disabled={loading}
-                  style={{ backgroundColor: "#22c55e", color: "white", border: "none", padding: "8px 20px", borderRadius: "6px", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
-                >
-                  Accept
-                </button>
-                <button
-                  onClick={() => handleStatus("rejected")}
-                  disabled={loading}
-                  style={{ backgroundColor: "#ef4444", color: "white", border: "none", padding: "8px 20px", borderRadius: "6px", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
-                >
-                  Reject
-                </button>
-              </>
-            ) : (
-              <span style={{
-                padding: "6px 16px",
-                borderRadius: "20px",
-                fontSize: "13px",
-                fontWeight: 600,
-                textTransform: "capitalize",
-                backgroundColor: leave.status === "approved" ? "#dcfce7" : "#fee2e2",
-                color: leave.status === "approved" ? "#16a34a" : "#dc2626",
-              }}>
-                {leave.status}
-              </span>
-            )}
-          </div>
-        </div>
+    <div style={{ maxWidth: "700px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
+        <button onClick={() => navigate(-1)} style={{ backgroundColor: "#f1f5f9", border: "none", padding: "7px 14px", borderRadius: "7px", cursor: "pointer", fontSize: "13px", fontWeight: 600, color: "#475569" }}>
+          ← Back
+        </button>
+        <h2 style={{ fontSize: "20px", fontWeight: 700, color: "#0f172a" }}>Leave Details</h2>
       </div>
 
-      <div style={{ marginTop: "24px", borderTop: "1px solid #e5e7eb", paddingTop: "16px" }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{ backgroundColor: "#6b7280", color: "white", border: "none", padding: "8px 20px", borderRadius: "6px", cursor: "pointer", fontSize: "14px" }}
-        >
-          Back
-        </button>
+      <div style={{ backgroundColor: "white", borderRadius: "12px", padding: "28px", boxShadow: "0 2px 12px rgba(0,0,0,0.07)" }}>
+        <div style={{ display: "flex", gap: "28px", alignItems: "flex-start" }}>
+          {/* Image */}
+          <div style={{ flexShrink: 0 }}>
+            {emp?.image ? (
+              <img
+                src={emp.image}
+                alt={emp?.name}
+                style={{ width: "120px", height: "140px", objectFit: "cover", borderRadius: "10px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}
+              />
+            ) : (
+              <div style={{ width: "120px", height: "140px", backgroundColor: "#2563eb", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: "44px", fontWeight: "bold" }}>
+                {emp?.name?.charAt(0).toUpperCase() || "?"}
+              </div>
+            )}
+          </div>
+
+          {/* Details */}
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "14px", fontSize: "14px" }}>
+            {[
+              { label: "Name:", value: emp?.name },
+              { label: "Employee ID:", value: emp?.employeeId },
+              { label: "Leave Type:", value: leave.leaveType },
+              { label: "Reason:", value: leave.description },
+              { label: "Department:", value: emp?.department?.name },
+              { label: "Start Date:", value: new Date(leave.fromDate).toLocaleDateString() },
+              { label: "End Date:", value: new Date(leave.toDate).toLocaleDateString() },
+            ].map(({ label, value }) => (
+              <div key={label} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ fontWeight: 700, color: "#1f2937", minWidth: "120px" }}>{label}</span>
+                <span style={{ color: "#4b5563" }}>{value || "-"}</span>
+              </div>
+            ))}
+
+            {/* Status + Action */}
+            <div style={{ marginTop: "8px" }}>
+              {leave.status === "pending" ? (
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <button
+                    onClick={() => handleStatus("approved")}
+                    disabled={loading}
+                    style={{ backgroundColor: "#22c55e", color: "white", border: "none", padding: "8px 20px", borderRadius: "6px", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={() => handleStatus("rejected")}
+                    disabled={loading}
+                    style={{ backgroundColor: "#ef4444", color: "white", border: "none", padding: "8px 20px", borderRadius: "6px", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
+                  >
+                    Reject
+                  </button>
+                </div>
+              ) : (
+                <span style={{
+                  padding: "6px 16px", borderRadius: "20px", fontSize: "13px", fontWeight: 600,
+                  textTransform: "capitalize",
+                  backgroundColor: leave.status === "approved" ? "#dcfce7" : "#fee2e2",
+                  color: leave.status === "approved" ? "#16a34a" : "#dc2626",
+                }}>
+                  {leave.status}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
